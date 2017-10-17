@@ -12,9 +12,7 @@ class RubyClx
   end
 
   def send(from:, to:, text:)
-    puts format_url(from, to, text)
     url = URI.parse(format_url(from, to, text))
-    puts url
 
     res = Net::HTTP.get_response(url)
 
