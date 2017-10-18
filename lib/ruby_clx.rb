@@ -1,14 +1,24 @@
 require 'net/http'
 
+require 'ruby_clx/configuration'
+
 class RubyClx
-  attr_writer :config
+  class << self
+    attr_accessor :configuration
+
+    def configure
+      self.configuration ||= Configuration.new
+
+      yield configuration
+    end
+  end
 
   def initialize
     yield config if block_given?
   end
 
   def config
-    @config ||= OpenStruct.new
+    @config ||= RubyClx.configuration.dup
   end
 
   def send(from:, to:, text:)
@@ -24,7 +34,7 @@ class RubyClx
   def format_url(from, to, text)
     "https://#{config.host}:#{config.port}/sendsms?username=#{config.username}"\
     "&password=#{config.password}&from=#{from}&to=#{CGI.escape(to)}"\
-    "&text=#{text}&dlr-mask=#{config.mask}"\
+    "&text=#{text}&dlr-mask=#{config.dlr_mask}"\
     "&dlr-url=#{CGI.escape(config.dlr_url)}&id=#{config.sms_message_id}"
   end
 end
