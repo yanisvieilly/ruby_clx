@@ -34,7 +34,7 @@ class RubyClx
   def format_url(from, to, text)
     "https://#{config.host}:#{config.port}/sendsms?username=#{config.username}"\
     "&password=#{config.password}&from=#{from}&to=#{CGI.escape(to)}"\
-    "&text=#{text}&dlr-mask=#{config.dlr_mask}"\
+    "&text=#{CGI.escape(text)}&dlr-mask=#{config.dlr_mask}"\
     "&dlr-url=#{CGI.escape(config.dlr_url)}&id=#{config.sms_message_id}"
   end
 end
